@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "solo-saas-starter",
-  description: "무료티어 기반 웹 SaaS 스타터",
+  title: "국립중앙의료원 통합의료정보시스템",
+  description: "병원 현황 대시보드 — 실시간 환자 현황 및 위험도 평가",
 };
 
 export default function RootLayout({

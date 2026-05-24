@@ -26,4 +26,4 @@ Owner의 행동이 필요한 부분은 AskUserQuestion으로 해결한다.
 - `pnpm install`로 설치
 - `pnpm audit`으로 점검
 
-세부 정책은 `.npmrc`와 CI 설정을 따른다.
+세부 정책은 `.npmrc`와 CI 설정을 따른다. 보안 게이트(cooldown, audit level 등)는 우회·수정 금지.

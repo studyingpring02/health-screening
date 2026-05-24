@@ -1,0 +1,51 @@
+# dependencies
+node_modules/
+.pnp/
+.pnp.*
+
+# next
+.next/
+out/
+build/
+
+# vercel
+.vercel
+.vercel.local
+
+# env (절대 커밋 금지)
+.env
+.env.local
+.env.*.local
+.env.development.local
+.env.production.local
+.env.sentry-build-plugin
+
+# testing
+coverage/
+.vitest-cache/
+
+# misc
+.DS_Store
+*.pem
+
+# logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# sentry
+.sentryclirc
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+
+# supabase (Docker 미사용이지만 잔여 파일 대비)
+supabase/.branches
+supabase/.temp

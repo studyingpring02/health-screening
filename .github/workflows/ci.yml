@@ -1,0 +1,61 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: typecheck · lint · test · build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@v6
+        with:
+          version: latest
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*   # 현재 LTS 자동 해석. 수동 갱신 불요.
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Audit (high/critical only)
+        # 알려진 CVE·악성 advisory 발견 시 빌드 실패.
+        # cooldown(.npmrc minimum-release-age)은 미공개·신선한 위험을 막고,
+        # audit은 공개된 known vulnerability를 막는다.
+        run: pnpm audit --prod --audit-level=high
+
+      - name: Typecheck
+        run: pnpm typecheck
+
+      - name: Lint
+        # lint:ci = eslint --max-warnings 0
+        # `@typescript-eslint/no-deprecated`가 warn level로 들어오므로 여기서 차단.
+        run: pnpm lint:ci
+
+      - name: Test
+        run: pnpm test
+        env:
+          # env.ts가 모듈 로드 시 zod 파싱하므로 테스트 임포트만으로도 필요.
+          # 단위 테스트는 외부 호출 X (mock 사용) — 더미 또는 GH Secrets 둘 다 OK.
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+
+      - name: Build
+        run: pnpm build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY }}
+          NEXT_PUBLIC_SENTRY_DSN: ${{ secrets.NEXT_PUBLIC_SENTRY_DSN }}
+          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}

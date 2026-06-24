@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "국립중앙의료원 통합의료정보시스템",
-  description: "병원 현황 대시보드 — 실시간 환자 현황 및 위험도 평가",
+  title: "노인 단백질 위험군 스크리닝 | 영양이음",
+  description: "식단 기록 없이 7개 항목만으로 노인의 단백질 결핍 위험을 AI로 선별하고, SHAP 기반으로 위험 요인을 설명하는 복지사·사회복지기관용 스크리닝 도구입니다.",
 };
 
 export default function RootLayout({

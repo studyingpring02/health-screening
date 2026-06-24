@@ -257,10 +257,14 @@ export function HealthDashboard() {
 <script>window.onload=function(){window.print();window.close();}<\/script>
 </body></html>`
 
-    const win = window.open("", "_blank", "width=720,height=960")
-    if (!win) return
-    win.document.write(html)
-    win.document.close()
+const blob = new Blob([html], { type: "text/html" })
+const url = URL.createObjectURL(blob)
+const win = window.open(url, "_blank", "width=720,height=960")
+if (!win) {
+  URL.revokeObjectURL(url)
+  return
+}
+win.addEventListener("unload", () => URL.revokeObjectURL(url))
   }
 
   return (
